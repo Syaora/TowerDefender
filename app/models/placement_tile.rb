@@ -1,0 +1,2 @@
+class PlacementTile < ApplicationRecord
+end
