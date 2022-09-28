@@ -148,3 +148,5 @@ const WAYPOINTS = [
    "x":1118,
    "y":848
   }]
+
+  export default WAYPOINTS
