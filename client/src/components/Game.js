@@ -63,8 +63,15 @@ export default function Game() {
       }
     }
 
-    const enemy = new Enemy({position: {x: 200, y:400}})
-    const enemy2 = new Enemy({position: {x: 0, y:400}})
+    const enemies = []
+    for (let i = 1; i < 10; i++) {
+      const xOffset = i * 70
+      enemies.push(
+        new Enemy({
+          position: { x: waypoints[0].x - xOffset, y: waypoints[0].y }
+        })
+      )
+    }
 
     //Animation looop
     function animate() {
@@ -72,8 +79,9 @@ export default function Game() {
 
       //map
       ctx.drawImage(image, 0, 0)
-      enemy.update()
-      enemy2.update()
+      enemies.forEach(enemy => {
+        enemy.update()
+      })
     }
 
     animate()
