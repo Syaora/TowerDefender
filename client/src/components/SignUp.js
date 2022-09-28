@@ -36,7 +36,7 @@ export default function SignIn() {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Register
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -73,7 +73,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Register
             </Button>
             <Grid container>
               <Grid item>

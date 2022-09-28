@@ -7,7 +7,9 @@ import {
 
 import HomePage from "./components/HomePage";
 import SignUp from "./components/SignUp";
-import Login from "./components/Login"
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard"
+import Game from "./components/Game"
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route exact path="/" element={ <HomePage /> } />
           <Route path="/signup" element={ <SignUp /> } />
           <Route path="/login" element={ <Login /> } />
+          <Route path="/dashboard" element={ <Dashboard /> } />
+          <Route path="/game" element={ <Game /> } />
         </Routes>
       </BrowserRouter>
     </>
