@@ -111,7 +111,32 @@ export default function Game() {
       })
 
       buildings.forEach(building => {
-        building.draw(ctx)
+        building.update(ctx)
+        building.target = null
+
+        //only grab enemies that are near the building
+        const validEnemies = enemies.filter(enemy => {
+          const xDifference = enemy.center.x - building.center.x
+          const yDifference = enemy.center.y - building.center.y
+          const distance = Math.hypot(xDifference, yDifference)
+          return distance < enemy.radius + building.radius
+        })
+        building.target = validEnemies[0]
+
+        //for loop used to account for bug in forEach function
+        for (let i = building.projectiles.length - 1; i >= 0; i--) {
+          const projectile = building.projectiles[i]
+          projectile.update(ctx)
+
+          const xDifference = projectile.enemy.center.x - projectile.position.x
+          const yDifference = projectile.enemy.center.y - projectile.position.y
+          const distance = Math.hypot(xDifference, yDifference)
+
+          //if projectile touches enemy's radius
+          if (distance < projectile.enemy.radius + projectile.radius) {
+            building.projectiles.splice(i, 1)
+          }
+        }
       })
     }
 

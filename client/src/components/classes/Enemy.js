@@ -8,11 +8,14 @@ export default class Enemy {
       x: this.position.x + this.width / 2,
       y: this.position.y + this.height / 2
     }
+    this.radius = 25 //use to check collision
   }
 
   draw(ctx) {
     ctx.fillStyle = 'red'
-    ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
+    ctx.beginPath()
+    ctx.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2)
+    ctx.fill()
   }
 
   //Function for enemies going on a path
