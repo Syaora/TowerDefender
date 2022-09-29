@@ -3,6 +3,7 @@ export default class PlacementTile {
     this.position = position
     this.size = 64
     this.color = 'rgba(255, 255, 255, 0.1)'
+    this.occupied = false
   }
 
   draw(ctx) {
@@ -17,8 +18,8 @@ export default class PlacementTile {
        mouse.x < this.position.x + this.size && 
        mouse.y > this.position.y && 
        mouse.y < this.position.y + this.size) {
-        console.log("colliding")
-      }
+        this.color = "white"
+      } else this.color = 'rgba(255, 255, 255, 0.1)'
   }
 }
 
