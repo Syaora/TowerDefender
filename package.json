@@ -11,6 +11,7 @@
     "heroku-postbuild": "npm run clean && npm run build && npm run deploy"
   },
   "dependencies": {
+    "@mui/material": "^5.10.7",
     "react-router-dom": "^6.4.1"
   }
 }
