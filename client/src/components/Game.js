@@ -72,14 +72,18 @@ export default function Game() {
     image.src = map
 
     const enemies = []
-    for (let i = 1; i < 10; i++) {
-      const xOffset = i * 70
-      enemies.push(
-        new Enemy({
-          position: { x: waypoints[0].x - xOffset, y: waypoints[0].y }
-        })
-      )
+
+    function spawnEnemies(spawnCount) {
+      for (let i = 1; i < spawnCount + 1; i++) {
+        const xOffset = i * 70
+        enemies.push(
+          new Enemy({
+            position: { x: waypoints[0].x - xOffset, y: waypoints[0].y }
+          })
+        )
+      }
     }
+    spawnEnemies(3)
 
     canvas.addEventListener('click', (event) => {
       if (activeTile && !activeTile.isOccupied) {
@@ -142,6 +146,11 @@ export default function Game() {
                 return projectile.enemy === enemy
               })
               if (enemyIndex > -1) enemies.splice(enemyIndex, 1)
+            }
+
+            //tracking total enemies
+            if (enemies.length === 0) {
+              spawnEnemies(5)
             }
 
             building.projectiles.splice(i, 1)
