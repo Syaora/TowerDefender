@@ -9,6 +9,7 @@ export default class Enemy {
       y: this.position.y + this.height / 2
     }
     this.radius = 25 //use to check collision
+    this.health = 100
   }
 
   draw(ctx) {
@@ -16,6 +17,13 @@ export default class Enemy {
     ctx.beginPath()
     ctx.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2)
     ctx.fill()
+
+    //health bar
+    ctx.fillStyle = 'red'
+    ctx.fillRect(this.position.x, this.position.y - 15, this.width, 10)
+
+    ctx.fillStyle = 'green'
+    ctx.fillRect(this.position.x, this.position.y - 15, this.width * this.health / 100, 10)
   }
 
   //Function for enemies going on a path
