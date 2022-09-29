@@ -1,12 +1,22 @@
 import './style/Game.css'
-import map from './img/meadowMap.png'
-import waypoints from './waypoints/meadowWaypoints.js'
+import map from './maps/meadow/meadowMap.png'
+import waypoints from './maps/meadow/meadowWaypoints'
+import placementTileData from "./maps/meadow/meadowPlacementTile.js"
 import { useEffect, useRef } from "react"
-
 export default function Game() {
   // const canvasRef = useRef(null)
 
   useEffect(() => {
+    const mouse = {
+      x: undefined, 
+      y: undefined
+    }
+  
+    window.addEventListener('mousemove', (event) => {
+      mouse.x = event.clientX
+      mouse.y = event.clientY
+    })
+    
     const canvas = document.querySelector('canvas')
     const ctx = canvas.getContext('2d')
 
@@ -15,6 +25,54 @@ export default function Game() {
 
     ctx.fillStyle = 'white'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    const placementTileData2D = []
+
+    for (let i = 0; i < placementTileData.length; i += 20){
+      placementTileData2D.push(placementTileData.slice(i, i + 20))
+    }
+
+    class PlacementTile {
+      constructor({ position = { x: 0, y:0 }}){
+        this.position = position
+        this.size = 64
+        this.color = 'rgba(255, 255, 255, 0.1)'
+      }
+
+      draw() {
+        ctx.fillStyle = this.color
+        ctx.fillRect(this.position.x, this.position.y, this.size, this.size)
+      }
+
+      update(mouse) {
+        this.draw()
+        
+        if (mouse.x > this.position.x &&
+           mouse.x < this.position.x + this.size && 
+           mouse.y > this.position.y && 
+           mouse.y < this.position.y + this.size) {
+            console.log("colliding")
+          }
+      }
+    }
+
+    const placementTiles = []
+
+    placementTileData2D.forEach((row, y) => {
+      row.forEach((symbol, x) => {
+        if (symbol === 170) {
+          //add building placement tile here
+          placementTiles.push(
+            new PlacementTile({
+              position: {
+                x: x * 64,
+                y: y * 64
+              }
+            })
+          )
+        }
+      })
+    })
 
     const image = new Image()
     image.src = map
@@ -81,6 +139,10 @@ export default function Game() {
       ctx.drawImage(image, 0, 0)
       enemies.forEach(enemy => {
         enemy.update()
+      })
+
+      placementTiles.forEach(tile => {
+        tile.update(mouse)
       })
     }
 
