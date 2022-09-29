@@ -2,7 +2,7 @@ import './style/Game.css'
 import map from './maps/meadow/meadowMap.png'
 import waypoints from './maps/meadow/meadowWaypoints'
 import placementTileData from "./maps/meadow/meadowPlacementTile.js"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 export default function Game() {
   // const canvasRef = useRef(null)
 
