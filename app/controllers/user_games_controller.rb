@@ -42,6 +42,7 @@ class UserGamesController < ApplicationController
 
   def user_game_params
     params.permit(:user_id, :game_id, :nmame, :money, :heatlh, :round_position)
+  end
 
   def render_not_found_response
     render json: { error: "Game not found" }, status: :not_found
