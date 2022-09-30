@@ -1,19 +1,16 @@
-export default class Projectile {
-  constructor({ position = { x: 0, y: 0}, enemy }) {
-    this.position = position
+import Sprite from "./Sprite"
+
+export default class Projectile extends Sprite {
+  constructor({ position = { x: 0, y: 0 }, enemy }) {
+    super({ position, frames: {
+      max: 6
+    } })
     this.velocity = {
       x: 0,
       y: 0
     }
-    this.enemy = enemy 
+    this.enemy = enemy
     this.radius = 10
-  }
-
-  draw(ctx) {
-    ctx.beginPath()
-    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
-    ctx.fillStyle = 'orange'
-    ctx.fill()
   }
 
   update(ctx) {

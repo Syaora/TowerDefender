@@ -1,5 +1,8 @@
-export default class PlacementTile {
+import React from "react"
+
+export default class PlacementTile extends React.Component {
   constructor({ position = { x: 0, y:0 }}){
+    super({ position })
     this.position = position
     this.size = 64
     this.color = 'rgba(255, 255, 255, 0.1)'

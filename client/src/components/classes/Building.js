@@ -1,4 +1,5 @@
 import Projectile from "./Projectile"
+import Sprite from "./Sprite"
 
 export default class Building {
   constructor({ position = { x: 0, y: 0 } }) {
