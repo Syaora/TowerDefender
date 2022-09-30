@@ -1,9 +1,20 @@
 import Projectile from "./Projectile"
 import Sprite from "./Sprite"
+import buildingImg from "./../img/Tower03.png"
 
-export default class Building {
+export default class Building extends Sprite {
   constructor({ position = { x: 0, y: 0 } }) {
-    this.position = position
+    super({
+      position,
+      imageSrc: buildingImg,
+      frames: {
+        max: 1
+      },
+      offset: {
+        x: 0,
+        y: -65
+      }
+    })
     this.width = 64
     this.height = 64
     this.center = {
@@ -13,32 +24,36 @@ export default class Building {
     this.projectiles = []
     this.target = null
     this.radius = 150
-    this.frames = 0
   }
 
   draw(ctx) {
-    ctx.fillStyle = 'blue'
-    ctx.fillRect(this.position.x, this.position.y, 64, 64)
+    super.draw(ctx)
 
-    ctx.beginPath()
-    ctx.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2)
-    ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-    ctx.fill()
+    //shooting range area
+    // ctx.beginPath()
+    // ctx.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2)
+    // ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+    // ctx.fill()
   }
 
   update(ctx) {
     this.draw(ctx)
+    if (this.target || !this.target && this.frames.current !== 0) super.update(ctx)
 
-    if (this.frames % 100 === 0 && this.target) {
-      this.projectiles.push(new Projectile({
+    if (this.target && 
+      this.frames.current === 0 &&
+      this.frames.elapsed % this.frames.hold === 0) this.shoot(ctx)
+  }
+
+  shoot(ctx) {
+    this.projectiles.push(
+      new Projectile({
         position: {
-          x: this.center.x,
-          y: this.center.y
+          x: this.center.x - 5,
+          y: this.center.y - 65
         },
         enemy: this.target
       })
-      )
-    }
-    this.frames++
+    )
   }
 }

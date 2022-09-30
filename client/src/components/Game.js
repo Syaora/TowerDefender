@@ -6,6 +6,8 @@ import { useEffect, useRef } from "react"
 import PlacementTile from './classes/PlacementTile'
 import Building from "./classes/Building"
 import Enemy from "./classes/Enemy"
+import Sprite from "./classes/Sprite"
+import explosionsPNG from "./img/Tower03impact.png"
 
 export default function Game() {
   // const canvasRef = useRef(null)
@@ -83,7 +85,6 @@ export default function Game() {
         )
       }
     }
-    spawnEnemies(3)
 
     canvas.addEventListener('click', (event) => {
       if (activeTile && !activeTile.isOccupied && coins - 50 >= 0) {
@@ -96,6 +97,11 @@ export default function Game() {
           }
         }))
         activeTile.isOccupied = true
+
+        //used to sort building to correct position so that they dont overlap
+        buildings.sort((a, b) => {
+          return a.position.y - b.position.y
+        })
       }
     })
 
@@ -103,6 +109,8 @@ export default function Game() {
     let activeTile = undefined
     let hearts = 10
     let coins = 100
+    const explosions = []
+    spawnEnemies(3)
 
     //Animation looop
     function animate() {
@@ -110,6 +118,8 @@ export default function Game() {
 
       //map
       ctx.drawImage(image, 0, 0)
+
+      //animate enemies
       for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i]
         enemy.update(ctx, waypoints)
@@ -124,6 +134,16 @@ export default function Game() {
             cancelAnimationFrame(animationID)
             document.querySelector('#gameOver').style.display = 'flex'
           }
+        }
+      }
+
+      for (let i = explosions.length - 1; i >= 0; i--) {
+        const explosion = explosions[i]
+        explosion.draw(ctx)
+        explosion.update(ctx)
+
+        if (explosion.frames.current >= explosion.frames.max - 1) {
+          explosions.splice(i , 1)
         }
       }
 
@@ -166,6 +186,7 @@ export default function Game() {
               const enemyIndex = enemies.findIndex((enemy) => {
                 return projectile.enemy === enemy
               })
+              //remove enemy from array and handles bug where it cant find enemy
               if (enemyIndex > -1) {
                 enemies.splice(enemyIndex, 1)
                 coins += 25
@@ -173,6 +194,13 @@ export default function Game() {
               }
             }
 
+            //explosions and remove projectile from array
+            explosions.push(new Sprite({
+              position: { x: projectile.position.x, y: projectile.position.y },
+              imageSrc: explosionsPNG,
+              frames: { max: 6 },
+              offset: { x: 0, y: 0 }
+             }))
             building.projectiles.splice(i, 1)
           }
         }

@@ -1,8 +1,9 @@
 import Sprite from "./Sprite"
+import image from "./../img/Tower03projectile.png"
 
 export default class Projectile extends Sprite {
   constructor({ position = { x: 0, y: 0 }, enemy }) {
-    super({ position, frames: {
+    super({ position, imageSrc: image, frames: {
       max: 6
     } })
     this.velocity = {
