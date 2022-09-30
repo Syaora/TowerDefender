@@ -99,16 +99,33 @@ export default function Game() {
 
     const buildings = []
     let activeTile = undefined
+    let hearts = 10
 
     //Animation looop
     function animate() {
-      requestAnimationFrame(animate)
+      const animationID = requestAnimationFrame(animate)
 
       //map
       ctx.drawImage(image, 0, 0)
       for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i]
         enemy.update(ctx, waypoints)
+
+        //if enemy reaches the end of path
+        if (enemy.position.y > canvas.height) {
+          hearts -= 1
+          enemies.splice(i, 1)
+
+          if (hearts === 0) {
+            cancelAnimationFrame(animationID)
+            document.querySelector('#gameOver').style.display = 'flex'
+          }
+        }
+      }
+
+      //tracking total enemies
+      if (enemies.length === 0) {
+        spawnEnemies(5)
       }
 
       placementTiles.forEach(tile => {
@@ -148,11 +165,6 @@ export default function Game() {
               if (enemyIndex > -1) enemies.splice(enemyIndex, 1)
             }
 
-            //tracking total enemies
-            if (enemies.length === 0) {
-              spawnEnemies(5)
-            }
-
             building.projectiles.splice(i, 1)
           }
         }
@@ -163,8 +175,20 @@ export default function Game() {
   }, [])
 
   return (
-    <>
+    <div style={{ position: "relative", display: "inline-block"}}>
       <canvas />
-    </>
+      <div id="gameOver" style={{
+        position: "absolute", 
+        top: 0, 
+        bottom: 0, 
+        left: 0, 
+        right: 0, 
+        display: "none", 
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "72px",
+        color: "white",
+        WebkitTextStroke: "3px black"}}>GAME OVER</div>
+    </div>
   )
 }
