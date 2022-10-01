@@ -1,6 +1,19 @@
-export default class Enemy {
+import Sprite from "./Sprite"
+import firebug from "./../img/Firebug.png"
+
+export default class Enemy extends Sprite {
   constructor({position = { x: 0, y: 0 }}) {
-    this.position = position
+    super({ 
+      position, 
+      imageSrc: firebug, 
+      frames: {
+        max: 8
+      },
+      offset: {
+        x: -35,
+        y: -10
+      }
+    })
     this.width = 50
     this.height = 50
     this.waypointIndex = 0
@@ -17,10 +30,7 @@ export default class Enemy {
   }
 
   draw(ctx) {
-    ctx.fillStyle = 'red'
-    ctx.beginPath()
-    ctx.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2)
-    ctx.fill()
+    super.draw(ctx)
 
     //health bar
     ctx.fillStyle = 'red'
@@ -33,6 +43,7 @@ export default class Enemy {
   //Function for enemies going on a path
   update(ctx, waypoints) {
     this.draw(ctx)
+    super.update(ctx)
 
     const waypoint = waypoints[this.waypointIndex]
     const yDistance = waypoint.y - this.center.y

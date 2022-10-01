@@ -2,7 +2,7 @@ import React from "react"
 
 export default class Sprite extends React.Component {
   constructor({ position = { x: 0, y: 0 }, imageSrc, frames = { max: 1 }, offset = { x: 0, y: 0 } }) {
-    super({ position })
+    super()
     this.position = position
     this.image = new Image()
     this.image.src = imageSrc

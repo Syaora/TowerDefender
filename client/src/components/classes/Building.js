@@ -38,7 +38,7 @@ export default class Building extends Sprite {
 
   update(ctx) {
     this.draw(ctx)
-    if (this.target || !this.target && this.frames.current !== 0) super.update(ctx)
+    if (this.target || (!this.target && this.frames.current !== 0)) super.update(ctx)
 
     if (this.target && 
       this.frames.current === 0 &&

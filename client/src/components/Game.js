@@ -199,7 +199,7 @@ export default function Game() {
               position: { x: projectile.position.x, y: projectile.position.y },
               imageSrc: explosionsPNG,
               frames: { max: 6 },
-              offset: { x: 0, y: 0 }
+              offset: { x: -30, y: -10 }
              }))
             building.projectiles.splice(i, 1)
           }
