@@ -7,22 +7,46 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-const theme = createTheme();
+export default function SignIn({ updateUser }) {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  })
+  const navigate = useNavigate()
+  const { username, password } = formData
 
-export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  function handleChange(e) {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    const user = {
+      username,
+      password
+    }
+    fetch(`/users`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify(user)
+    }).then(res => {
+      if (res.ok) {
+        res.json().then(user => {
+          updateUser(user)
+          navigate(`/dashboard`)
+        })
+      } else {
+        console.log("error sign up")
+      }
+    })
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -38,27 +62,29 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Register
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              label="Username"
+              name="username"
+              value={username}
+              autoComplete="username"
+              onChange={handleChange}
               autoFocus
             />
             <TextField
               margin="normal"
               required
               fullWidth
+              value={password}
               name="password"
               label="Password"
               type="password"
-              id="password"
+              onChange={handleChange}
             />
-            <TextField
+            {/* <TextField
               margin="normal"
               required
               fullWidth
@@ -66,7 +92,7 @@ export default function SignIn() {
               label="Confirm Password"
               type="password"
               id="confirmPassword"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth
@@ -85,6 +111,6 @@ export default function SignIn() {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

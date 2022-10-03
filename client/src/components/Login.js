@@ -9,22 +9,49 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-const theme = createTheme();
+export default function Login({ updateUser }) {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  })
+  const navigate = useNavigate()
+  const {username, password} = formData
 
-export default function SignIn() {
-  const handleSubmit = (event) => {
+  function onSubmit(event) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+    const user = {
+      username,
+      password
+    }
+
+    fetch(`/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    }).then(res => {
+      if (res.ok){
+        res.json().then(user => {
+          updateUser(user)
+          navigate(`/dashboard`)
+        })
+      } else {
+        console.log("error")
+      }
+    })
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -38,17 +65,18 @@ export default function SignIn() {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Login
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              label="Username"
+              name="username"
+              value={username}
+              autoComplete="username"
+              onChange={handleChange}
               autoFocus
             />
             <TextField
@@ -58,7 +86,8 @@ export default function SignIn() {
               name="password"
               label="Password"
               type="password"
-              id="password"
+              value={password}
+              onChange={handleChange}
               autoComplete="current-password"
             />
             <FormControlLabel
@@ -71,7 +100,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Log In
             </Button>
             <Grid container>
               {/* <Grid item xs>
@@ -87,7 +116,8 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
+        <Button onClick={() => navigate("/dashboard")}>Dashboard</Button>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

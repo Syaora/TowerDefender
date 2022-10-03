@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -12,14 +12,19 @@ import Dashboard from "./components/Dashboard"
 import Game from "./components/Game"
 
 function App() {
+  const [currentUser, setCurrentUser] = useState("")
+
+  const updateUser = (user) => setCurrentUser(user)
+  console.log(currentUser)
+
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={ <HomePage /> } />
-          <Route path="/signup" element={ <SignUp /> } />
-          <Route path="/login" element={ <Login /> } />
-          <Route path="/dashboard" element={ <Dashboard /> } />
+          <Route path="/signup" element={ <SignUp updateUser={updateUser} /> } />
+          <Route path="/login" element={ <Login updateUser={updateUser} /> } />
+          <Route path="/dashboard" element={ <Dashboard currentUser={currentUser} updateUser={updateUser} /> } />
           <Route path="/game" element={ <Game /> } />
         </Routes>
       </BrowserRouter>
