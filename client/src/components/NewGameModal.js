@@ -9,10 +9,6 @@ import { useState } from "react"
 export default function NewGameModal({ open, onClose, handleNewGame}) {
   const [name, setName] = useState("")
 
-  function onName(name){
-    setName(name)
-  }
-
   function onNameChange(event) {
     setName(event.target.value)
   }

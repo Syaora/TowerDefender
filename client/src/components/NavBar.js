@@ -28,7 +28,7 @@ export default function NavBar() {
           </Typography>
         </Box>
         {user ? <Button onClick={() => navigate("/dashboard")} color="inherit">Dashboard</Button> : null}
-        {user ? <Button onClick={() => handleLogOut} color="inherit">Logout</Button> : null}
+        {user ? <Button onClick={handleLogOut} color="inherit">Logout</Button> : null}
       </Toolbar>
     </AppBar>
   )
