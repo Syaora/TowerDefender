@@ -7,19 +7,10 @@ export default function Dashboard(){
   const { user, setUser } = useContext(UserContext)
   const navigate = useNavigate()
 
-  function handleLogOut() {
-    fetch(`/logout`, {
-      method: "DELETE"
-    })
-    setUser(null)
-    navigate("/login")
-  }
-
   return (
     <>
       <ul>
-        <li>{user.username}</li>
-        { user ? <li><Button onClick={handleLogOut}>Logout</Button></li> : null }
+        <li>{ user ? user.username : null }</li>
         <li><Button onClick={() => navigate("/login")}></Button></li>
       </ul>
     </>

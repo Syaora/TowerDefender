@@ -103,7 +103,7 @@ export default function SignIn() {
             >
               Register
             </Button>
-            <Grid container>
+            <Grid justifyContent="center" container>
               <Grid item>
                 <Link href="/login" variant="body2">
                   {"Have an account? Login"}
