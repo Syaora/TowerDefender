@@ -11,7 +11,6 @@ export default function Dashboard(){
     <>
       <ul>
         <li>{ user ? user.username : null }</li>
-        <li><Button onClick={() => navigate("/login")}></Button></li>
       </ul>
     </>
   )

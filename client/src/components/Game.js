@@ -12,6 +12,18 @@ import explosionsPNG from "./img/Tower03impact.png"
 export default function Game() {
   // const canvasRef = useRef(null)
 
+  // function computePointInCanvas(clientX, clientY){
+  //   if (canvasRef.current) {
+  //     const boundingRect = canvasRef.current.getBoundingClientRect()
+  //     return {
+  //       x: clientX - boundingRect.left,
+  //       y: clientY - boundingRect.top
+  //     }
+  //   } else {
+  //     return null
+  //   }
+  // }
+
   useEffect(() => {
     const mouse = {
       x: undefined,
@@ -19,8 +31,9 @@ export default function Game() {
     }
 
     window.addEventListener('mousemove', (event) => {
-      mouse.x = event.clientX
-      mouse.y = event.clientY
+      const rect = canvas.getBoundingClientRect()
+      mouse.x = event.clientX - rect.left
+      mouse.y = event.clientY - rect.top
 
       for (let i = 0; i < placementTiles.length; i++) {
         const tile = placementTiles[i]
@@ -211,6 +224,7 @@ export default function Game() {
   }, [])
 
   return (
+    <div style={{ width: "100vw", height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
     <div style={{ position: "relative", display: "inline-block" }}>
       <canvas />
       <div id="gameOver" style={{
@@ -285,6 +299,7 @@ export default function Game() {
           <div id="hearts">10</div>
         </div>
       </div>
+    </div>
     </div>
   )
 }
