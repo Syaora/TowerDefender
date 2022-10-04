@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_20_185442) do
+ActiveRecord::Schema.define(version: 2022_10_04_061528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2022_09_20_185442) do
   end
 
   create_table "enemies", force: :cascade do |t|
-    t.string "image_url"
+    t.string "name"
     t.integer "health"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 2022_09_20_185442) do
     t.integer "spawn_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "round_id"
   end
 
 end
