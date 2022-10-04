@@ -8,8 +8,13 @@ import Building from "./classes/Building"
 import Enemy from "./classes/Enemy"
 import Sprite from "./classes/Sprite"
 import explosionsPNG from "./img/Tower03impact.png"
+import { useLocation } from "react-router-dom"
 
 export default function Game() {
+  const location = useLocation()
+  let userInfo = location.state.userInfo
+  let hearts = userInfo.health
+  let coins = userInfo.money
 
   useEffect(() => {
     const mouse = {
@@ -19,8 +24,6 @@ export default function Game() {
     const enemies = []
     const buildings = []
     let activeTile = undefined
-    let hearts = 10
-    let coins = 100
     const explosions = []
     spawnEnemies(3)
   
@@ -205,6 +208,10 @@ export default function Game() {
       })
     }
 
+    return () => {
+      window.cancelAnimationFrame(animate)
+    }
+
     animate()
   }, [])
 
@@ -265,7 +272,7 @@ export default function Game() {
              30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4
               148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5V432c0 44.2-86 80-192 80S0 476.2 0
                432V396.6c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/></svg>
-          <div id="coins">100</div>
+          <div id="coins">{coins}</div>
         </div>
 
         {/* hearts */}
@@ -281,7 +288,7 @@ export default function Game() {
               strokeLinejoin="round"
               d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
           </svg>
-          <div id="hearts">10</div>
+          <div id="hearts">{hearts}</div>
         </div>
       </div>
     </div>

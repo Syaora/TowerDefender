@@ -15,7 +15,6 @@ import NewGameModal from './NewGameModal';
 export default function Dashboard() {
   const { user } = useContext(UserContext)
   const [userGames, setUserGames] = useState([])
-  const [ notFound, setNotFound ] = useState(false)
   const [open, setOpen] = useState(false)
   const img = map
   const navigate = useNavigate()
@@ -28,8 +27,6 @@ export default function Dashboard() {
             res.json().then((games) => {
               setUserGames(games)
             })
-          } else {
-            setNotFound(true)
           }
         })
     } else {
@@ -53,7 +50,7 @@ export default function Dashboard() {
       if (res.ok) {
         res.json().then(game => {
           //Pass usergame.id to game
-          navigate("/game", game)
+          navigate("/game", { state: { userInfo: game }})
         })
       } else {
         console.log(res)
@@ -83,16 +80,15 @@ export default function Dashboard() {
             <Button onClick={() => setOpen(true)} variant="contained">Start a New Game</Button>
           </Grid>
         </div>
-        { notFound ? <div>No Games Found</div> : null }
         <Grid container spacing={4} >
           {userGames.map((game) => (
             <Grid item xs={12} sm={6} md={4} key={game.id}>
               <Card
-                sx={{ height: '65%', display: 'flex', flexDirection: 'column' }}
+                sx={{ height: "280px", display: 'flex', flexDirection: 'column' }}
               >
                 <CardMedia
                   component="img"
-                  height="300"
+                  height="160"
                   sx={{
                     objectFit: "contain"
                   }}
@@ -104,7 +100,7 @@ export default function Dashboard() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small">Play</Button>
+                  <Button onClick={() => navigate("/game", { state: { userInfo: game }})} size="small">Play</Button>
                   <Button onClick={() => onDeleteGame(game.id)} size="small">Delete</Button>
                 </CardActions>
               </Card>
