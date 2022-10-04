@@ -7,7 +7,7 @@ class UserGamesController < ApplicationController
   def create
     user_game = UserGame.create!(
       user_id: params[:user_id],
-      game_id: 1,
+      game_id: params[:game_id],
       name: params[:name],
       health: 50,
       money: 50,

@@ -44,9 +44,9 @@ export default function Dashboard() {
   function handleNewGame(name) {
     console.log(name)
     console.log(user.id)
-    fetch("/user_games", {
+    fetch(`/user_games`, {
       method: "POST",
-      header: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
         user_id: user.id,
         game_id: 1,
@@ -58,6 +58,15 @@ export default function Dashboard() {
       } else {
         console.log(res)
       }
+    })
+  }
+
+  function onDeleteGame(id){
+    fetch(`/user_games/${id}`, {
+      method: "DELETE"
+    }).then(res => {
+      let newGames = userGames.filter((currentGames) => currentGames.id !== id)
+      setUserGames(newGames)
     })
   }
 
@@ -77,9 +86,8 @@ export default function Dashboard() {
         { notFound ? <div>No Games Found</div> : null }
         <Grid container spacing={4} >
           {userGames.map((game) => (
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} key={game.id}>
               <Card
-                key={game.id}
                 sx={{ height: '65%', display: 'flex', flexDirection: 'column' }}
               >
                 <CardMedia
@@ -97,7 +105,7 @@ export default function Dashboard() {
                 </CardContent>
                 <CardActions>
                   <Button size="small">Play</Button>
-                  <Button size="small">Delete</Button>
+                  <Button onClick={() => onDeleteGame(game.id)} size="small">Delete</Button>
                 </CardActions>
               </Card>
               <NewGameModal open={open} onClose={onClose} handleNewGame={handleNewGame} />
