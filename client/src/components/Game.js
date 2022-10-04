@@ -208,11 +208,11 @@ export default function Game() {
       })
     }
 
+    animate()
+    
     return () => {
       window.cancelAnimationFrame(animate)
     }
-
-    animate()
   }, [])
 
   return (
