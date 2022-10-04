@@ -104,9 +104,9 @@ export default function Dashboard() {
                   <Button onClick={() => onDeleteGame(game.id)} size="small">Delete</Button>
                 </CardActions>
               </Card>
-              <NewGameModal open={open} onClose={onClose} handleNewGame={handleNewGame} />
             </Grid>
           ))}
+          <NewGameModal open={open} onClose={onClose} handleNewGame={handleNewGame} />
         </Grid>
       </Container>
     </>
