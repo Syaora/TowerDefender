@@ -1,12 +1,19 @@
 class UserGamesController < ApplicationController
-  def index
-    user_games = UserGame.all 
-    render json: user_games
+  def games
+    user_games = UserGame.where(user_id: current_user.id)
+    render json: user_games, status: :ok
   end
 
   def create
-    user_game = UserGame.create(user_game_params)
-    render json: user_game, status: :created
+    user_game = UserGame.create!(
+      user_id: params[:user_id],
+      game_id: 1,
+      name: params[:name],
+      health: 50,
+      money: 50,
+      round_position: 1
+    )
+    render json: user_game, status: :ok
   end
 
   def show
@@ -14,7 +21,7 @@ class UserGamesController < ApplicationController
     if user_game
       render json: user_game
     else
-      render_not_found_response
+      render_not_found
     end
   end
 
@@ -24,7 +31,7 @@ class UserGamesController < ApplicationController
       user_game.update(user_game)
       render json: user_game 
     else
-      render_not_found_response
+      render_not_found
     end
   end
 
@@ -34,17 +41,13 @@ class UserGamesController < ApplicationController
       user_game.destroy
       head :no_content
     else
-      render_not_found_response
+      render_not_found
     end
   end
 
   private
 
   def user_game_params
-    params.permit(:user_id, :game_id, :nmame, :money, :heatlh, :round_position)
-  end
-
-  def render_not_found_response
-    render json: { error: "Game not found" }, status: :not_found
+    params.permit(:name, :money, :health, :round_position)
   end
 end

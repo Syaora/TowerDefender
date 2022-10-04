@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -14,7 +14,6 @@ import NavBar from "./components/NavBar"
 
 
 function App() {
-
   return (
     <>
       <BrowserRouter>

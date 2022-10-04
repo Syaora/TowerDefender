@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
-  resources :users, only: [:show, :create] 
-
+  resources :users, only: [:show, :create]
+  resources :user_games
   #session
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
-  get "/dashboard", to: "users#show"
+
+  #user
+  get "/dashboard", to: "user_games#show"
+  get "/usergames", to: "user_games#games"
 
   # Routing logic: fallback requests for React Router.
   # Leave this here to help deploy your app later!

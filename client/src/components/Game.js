@@ -10,30 +10,31 @@ import Sprite from "./classes/Sprite"
 import explosionsPNG from "./img/Tower03impact.png"
 
 export default function Game() {
-  const mouse = {
-    x: undefined,
-    y: undefined
-  }
-  const enemies = []
-  const buildings = []
-  let activeTile = undefined
-  let hearts = 10
-  let coins = 100
-  const explosions = []
-  spawnEnemies(3)
-
-  function spawnEnemies(spawnCount) {
-    for (let i = 1; i < spawnCount + 1; i++) {
-      const xOffset = i * 70
-      enemies.push(
-        new Enemy({
-          position: { x: waypoints[0].x - xOffset, y: waypoints[0].y }
-        })
-      )
-    }
-  }
 
   useEffect(() => {
+    const mouse = {
+      x: undefined,
+      y: undefined
+    }
+    const enemies = []
+    const buildings = []
+    let activeTile = undefined
+    let hearts = 10
+    let coins = 100
+    const explosions = []
+    spawnEnemies(3)
+  
+    function spawnEnemies(spawnCount) {
+      for (let i = 1; i < spawnCount + 1; i++) {
+        const xOffset = i * 70
+        enemies.push(
+          new Enemy({
+            position: { x: waypoints[0].x - xOffset, y: waypoints[0].y }
+          })
+        )
+      }
+    }
+    
     window.addEventListener('mousemove', (event) => {
       const rect = canvas.getBoundingClientRect()
       mouse.x = event.clientX - rect.left

@@ -5,7 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-Game.create(map: 'meadow')
+g1 = Game.create(map: 'meadow')
 
 Round.create(money: '10', number: 1)
 Round.create(money: '13', number: 2)
@@ -33,3 +33,8 @@ Wave.create(enemy_id: 1, spawn_count: 8, round_id: 5)
 Wave.create(enemy_id: 1, spawn_count: 5, round_id: 5)
 Wave.create(enemy_id: 1, spawn_count: 7, round_id: 5)
 Wave.create(enemy_id: 1, spawn_count: 10, round_id: 5)
+
+u1 = User.create(username: "Test", password: "test")
+
+UserGame.create(user: u1, game: g1, name: "test", money: 50, health: 50)
+UserGame.create(user: u1, game: g1, name: "test2", money: 50, health: 50)

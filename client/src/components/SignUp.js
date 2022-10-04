@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { UserContext } from '../context/user';
 
@@ -46,6 +46,10 @@ export default function SignIn() {
       }
     })
   };
+
+  useEffect(() => {
+    if (user) navigate("/dashboard")
+  }, [])
 
   return (
     <>
