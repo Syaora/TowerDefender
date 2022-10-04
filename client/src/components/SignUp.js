@@ -7,10 +7,12 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useNavigate } from "react-router-dom"
+import { UserContext } from '../context/user';
 
-export default function SignIn({ updateUser }) {
+export default function SignIn() {
+  const { user, setUser } = useContext(UserContext)
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -25,18 +27,18 @@ export default function SignIn({ updateUser }) {
 
   function onSubmit(e) {
     e.preventDefault();
-    const user = {
+    const defaultUser = {
       username,
       password
     }
     fetch(`/users`, {
       method: "POST",
       headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify(user)
+      body: JSON.stringify(defaultUser)
     }).then(res => {
       if (res.ok) {
-        res.json().then(user => {
-          updateUser(user)
+        res.json().then(defaultUser => {
+          setUser(defaultUser)
           navigate(`/dashboard`)
         })
       } else {
