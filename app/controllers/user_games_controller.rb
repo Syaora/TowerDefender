@@ -5,9 +5,10 @@ class UserGamesController < ApplicationController
   end
 
   def create
-    user_game = UserGame.create!(
+    game = Game.find_by(map: "meadow") #temp
+    user_game = UserGame.create(
       user_id: params[:user_id],
-      game_id: params[:game_id],
+      game_id: game.id, #Map --- needs to be updated later to allow different maps
       name: params[:name],
       health: 50,
       money: 50,
@@ -48,6 +49,6 @@ class UserGamesController < ApplicationController
   private
 
   def user_game_params
-    params.permit(:name, :money, :health, :round_position)
+    params.permit(:user_id, :game_id, :name, :money, :health, :round_position)
   end
 end

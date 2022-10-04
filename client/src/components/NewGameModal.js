@@ -7,13 +7,18 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from "react"
 
 export default function NewGameModal({ open, onClose, handleNewGame}) {
-  const [name, setName] = useState("New Game")
+  const [name, setName] = useState("")
 
   function onName(name){
     setName(name)
   }
 
+  function onNameChange(event) {
+    setName(event.target.value)
+  }
+
   function onSubmit() {
+    setName("")
     handleNewGame(name)
   }
 
@@ -27,7 +32,7 @@ export default function NewGameModal({ open, onClose, handleNewGame}) {
           label="Name"
           name="name"
           value={name}
-          onChange={onName}
+          onChange={onNameChange}
           fullWidth
           variant="standard"
         />

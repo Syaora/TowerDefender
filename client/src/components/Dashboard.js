@@ -42,19 +42,19 @@ export default function Dashboard() {
   }
 
   function handleNewGame(name) {
-    console.log(name)
-    console.log(user.id)
     fetch(`/user_games`, {
       method: "POST",
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
         user_id: user.id,
-        game_id: 1,
         name: name
       })
     }).then(res => {
       if (res.ok) {
-        res.json().then(game => console.log(game))
+        res.json().then(game => {
+          //Pass usergame.id to game
+          navigate("/game", game)
+        })
       } else {
         console.log(res)
       }
