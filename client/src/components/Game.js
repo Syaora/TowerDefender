@@ -1,7 +1,7 @@
 import map from './maps/meadow/meadowMap.png'
 import waypoints from './maps/meadow/meadowWaypoints'
 import placementTileData from "./maps/meadow/meadowPlacementTile.js"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useContext } from "react"
 import PlacementTile from './classes/PlacementTile'
 import Building from "./classes/Building"
 import Enemy from "./classes/Enemy"
@@ -10,16 +10,24 @@ import explosionsPNG from "./img/Tower03impact.png"
 import { useLocation, useNavigate } from "react-router-dom"
 import IconButton from '@mui/material/IconButton';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
+import { UserContext } from "../context/user"
 
 export default function Game() {
+  const { user } = useContext(UserContext)
+  const [userInfo, setUserInfo] = useState([])
+
   const [waves, setWaves] = useState([])
-  const navigate = useNavigate
+  const enemies = []
+
   const location = useLocation()
-  let userInfo = location.state.userInfo
+  let canvasRef = useRef(null)
+
+  const navigate = useNavigate()
+
   let hearts = userInfo.health
   let coins = userInfo.money
-  let canvasRef = useRef(null)
-  const enemies = []
+  const buildings = []
+
   const mouse = {
     x: undefined,
     y: undefined
@@ -45,28 +53,34 @@ export default function Game() {
     }
   }
 
-  function getRoundInfo() {
-    fetch(`/rounds/${userInfo.round_position}`)
+  function getRoundInfo(info) {
+    fetch(`/rounds/${info.round_position}`)
       .then(res => {
         res.json().then(res => {
           setWaves(res.waves)
         })
       })
   }
-
+  
+  ///////////////////////Game Setup////////////////////
   useEffect(() => {
-    if (userInfo) {
-      console.log(userInfo)
-      getRoundInfo()
+    const info = location.state ? location.state.userInfo : false
+
+    if (info && user) {
+      setUserInfo(info)
+      getRoundInfo(info)
     } else {
       navigate("/dashboard")
     }
+  }, [])
 
-    const buildings = []
+  ///////////////////////Gameplay/////////////////////////////
+  useEffect(() => {
     let activeTile = undefined
     const explosions = []
     spawnEnemies(3)
 
+    ///////////////////////Mouse//////////////////////////////
     window.addEventListener('mousemove', (event) => {
       const rect = canvas.getBoundingClientRect()
       mouse.x = event.clientX - rect.left
@@ -96,6 +110,7 @@ export default function Game() {
     ctx.fillStyle = 'white'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+    ////////////////////////Placement Tile/////////////////////////////
     const placementTileData2D = []
 
     for (let i = 0; i < placementTileData.length; i += 20) {
@@ -122,7 +137,8 @@ export default function Game() {
 
     const image = new Image()
     image.src = map
-
+    
+    /////////////////////Building Placement///////////////////////
     canvas.addEventListener('click', (event) => {
       if (activeTile && !activeTile.isOccupied && coins - 50 >= 0) {
         coins -= 50
@@ -142,9 +158,12 @@ export default function Game() {
       }
     })
 
+    /////////////////////////ANIMATION//////////////////////////
+    let animationID
+
     //Animation looop
     function animate() {
-      const animationID = requestAnimationFrame(animate)
+      animationID = requestAnimationFrame(animate)
 
       //map
       ctx.drawImage(image, 0, 0)
@@ -240,7 +259,7 @@ export default function Game() {
     animate()
 
     return function cleanup() {
-      window.cancelAnimationFrame(animate)
+      cancelAnimationFrame(animationID)
     }
   }, [])
 
