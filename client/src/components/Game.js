@@ -8,9 +8,11 @@ import Enemy from "./classes/Enemy"
 import Sprite from "./classes/Sprite"
 import explosionsPNG from "./img/Tower03impact.png"
 import { useLocation, useNavigate } from "react-router-dom"
+import IconButton from '@mui/material/IconButton';
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 
 export default function Game() {
-  const [ waves, setWaves ] = useState([])
+  const [waves, setWaves] = useState([])
   const navigate = useNavigate
   const location = useLocation()
   let userInfo = location.state.userInfo
@@ -23,7 +25,7 @@ export default function Game() {
     y: undefined
   }
 
-  function updateGame(){
+  function updateGame() {
     fetch(`/user_games/${userInfo.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -45,15 +47,16 @@ export default function Game() {
 
   function getRoundInfo() {
     fetch(`/rounds/${userInfo.round_position}`)
-    .then(res => {
-      res.json().then(res => {
-        console.log(res)
+      .then(res => {
+        res.json().then(res => {
+          setWaves(res.waves)
+        })
       })
-    })
   }
 
   useEffect(() => {
     if (userInfo) {
+      console.log(userInfo)
       getRoundInfo()
     } else {
       navigate("/dashboard")
@@ -63,7 +66,7 @@ export default function Game() {
     let activeTile = undefined
     const explosions = []
     spawnEnemies(3)
-    
+
     window.addEventListener('mousemove', (event) => {
       const rect = canvas.getBoundingClientRect()
       mouse.x = event.clientX - rect.left
@@ -170,7 +173,7 @@ export default function Game() {
         explosion.update(ctx)
 
         if (explosion.frames.current >= explosion.frames.max - 1) {
-          explosions.splice(i , 1)
+          explosions.splice(i, 1)
         }
       }
 
@@ -227,7 +230,7 @@ export default function Game() {
               imageSrc: explosionsPNG,
               frames: { max: 6 },
               offset: { x: -30, y: -25 }
-             }))
+            }))
             building.projectiles.splice(i, 1)
           }
         }
@@ -235,7 +238,7 @@ export default function Game() {
     }
 
     animate()
-    
+
     return function cleanup() {
       window.cancelAnimationFrame(animate)
     }
@@ -243,44 +246,71 @@ export default function Game() {
 
   return (
     <div style={{ width: "100vw", height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-    <div style={{ position: "relative", display: "inline-block" }}>
-      <canvas ref={canvasRef} />
-      <div id="gameOver" style={{
-        position: "absolute",
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        display: "none",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "72px",
-        color: "white",
-        WebkitTextStroke: "3px black"
-      }}>GAME OVER</div>
+      <div style={{ position: "relative", display: "inline-block" }}>
+        <canvas ref={canvasRef} />
+        <div id="gameOver" style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: "none",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "72px",
+          color: "white",
+          WebkitTextStroke: "3px black"
+        }}>GAME OVER</div>
 
-      <div style={{ 
-        position: "absolute", 
-        top: 0, 
-        right: 0, 
-        width: "400px", 
-        height: "80px", 
-        background: "linear-gradient(to left bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)" }}></div>
+        {/* Background for resources */}
+        <div style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          width: "400px",
+          height: "80px",
+          background: "linear-gradient(to left bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)"
+        }}></div>
 
-      <div style={{
-        position: "absolute",
-        top: "4px",
-        right: "8px",
-        fontSize: "36px",
-        color: "white",
-        display: "flex",
-        alignItems: "center"
-      }}>
+        <IconButton id="playBtn" size="large" sx={{
+          position: "absolute",
+          bottom: "4px",
+          right: "8px",
+          fontSize: "36px",
+          color: "white",
+          display: "flex",
+          alignItems: "center"
+        }}>
+          <PlayCircleFilledIcon style={{ fontSize: "60px"}} />
+        </IconButton>
 
-        {/* coins */}
-        <div style={{ display: "flex", alignItem: "center", marginRight: "20px" }}>
-          <svg style={{ width: "25px", color: "gold", marginRight: "5px" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
-            <path d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 
+        {/* Round Number */}
+        <div style={{
+          position: "absolute",
+          top: "4px",
+          left: "8px",
+          fontSize: "36px",
+          color: "white",
+          display: "flex",
+          alignItems: "center"
+        }}>
+          Round {userInfo.round_position}
+        </div>
+
+        <div style={{
+          position: "absolute",
+          top: "4px",
+          right: "8px",
+          fontSize: "36px",
+          color: "white",
+          display: "flex",
+          alignItems: "center"
+        }}>
+
+          {/* coins */}
+          <div style={{ display: "flex", alignItem: "center", marginRight: "20px" }}>
+            <svg style={{ width: "25px", color: "gold", marginRight: "5px" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+              <path d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 
           30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 
           .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 
           35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 
@@ -298,26 +328,26 @@ export default function Game() {
              30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4
               148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5V432c0 44.2-86 80-192 80S0 476.2 0
                432V396.6c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/></svg>
-          <div id="coins">{coins}</div>
-        </div>
+            <div id="coins">{coins}</div>
+          </div>
 
-        {/* hearts */}
-        <div style={{ display: "flex", alignItem: "center" }}>
-          <svg style={{ width: "35px", color: "red", marginRight: "5px" }}
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6">
-            <path strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-          </svg>
-          <div id="hearts">{hearts}</div>
+          {/* hearts */}
+          <div style={{ display: "flex", alignItem: "center" }}>
+            <svg style={{ width: "35px", color: "red", marginRight: "5px" }}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6">
+              <path strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </svg>
+            <div id="hearts">{hearts}</div>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   )
 }
