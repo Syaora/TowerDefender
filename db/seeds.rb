@@ -36,5 +36,5 @@ Wave.create(enemy_id: 1, spawn_count: 10, round_id: 5)
 
 u1 = User.create(username: "Test", password: "test")
 
-UserGame.create(user: u1, game: g1, name: "test", money: 50, health: 50)
-UserGame.create(user: u1, game: g1, name: "test2", money: 50, health: 50)
+UserGame.create(user: u1, game: g1, name: "test", money: 50, health: 50, round_position: 1)
+UserGame.create(user: u1, game: g1, name: "test2", money: 50, health: 50, round_position: 1)

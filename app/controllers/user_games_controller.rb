@@ -6,7 +6,7 @@ class UserGamesController < ApplicationController
 
   def create
     game = Game.find_by(map: "meadow") #temp
-    user_game = UserGame.create(
+    user_game = UserGame.create!(
       user_id: params[:user_id],
       game_id: game.id, #Map --- needs to be updated later to allow different maps
       name: params[:name],

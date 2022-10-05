@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :users, only: [:show, :create]
   resources :user_games
+  resources :games, only: [:index]
+  resources :rounds, only: [:show]
+
   #session
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"

@@ -1,41 +1,68 @@
 import map from './maps/meadow/meadowMap.png'
 import waypoints from './maps/meadow/meadowWaypoints'
 import placementTileData from "./maps/meadow/meadowPlacementTile.js"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import PlacementTile from './classes/PlacementTile'
 import Building from "./classes/Building"
 import Enemy from "./classes/Enemy"
 import Sprite from "./classes/Sprite"
 import explosionsPNG from "./img/Tower03impact.png"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 export default function Game() {
+  const [ waves, setWaves ] = useState([])
+  const navigate = useNavigate
   const location = useLocation()
   let userInfo = location.state.userInfo
   let hearts = userInfo.health
   let coins = userInfo.money
+  let canvasRef = useRef(null)
+  const enemies = []
+  const mouse = {
+    x: undefined,
+    y: undefined
+  }
+
+  function updateGame(){
+    fetch(`/user_games/${userInfo.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+      })
+    })
+  }
+
+  function spawnEnemies(spawnCount) {
+    for (let i = 1; i < spawnCount + 1; i++) {
+      const xOffset = i * 70
+      enemies.push(
+        new Enemy({
+          position: { x: waypoints[0].x - xOffset, y: waypoints[0].y }
+        })
+      )
+    }
+  }
+
+  function getRoundInfo() {
+    fetch(`/rounds/${userInfo.round_position}`)
+    .then(res => {
+      res.json().then(res => {
+        console.log(res)
+      })
+    })
+  }
 
   useEffect(() => {
-    const mouse = {
-      x: undefined,
-      y: undefined
+    if (userInfo) {
+      getRoundInfo()
+    } else {
+      navigate("/dashboard")
     }
-    const enemies = []
+
     const buildings = []
     let activeTile = undefined
     const explosions = []
     spawnEnemies(3)
-  
-    function spawnEnemies(spawnCount) {
-      for (let i = 1; i < spawnCount + 1; i++) {
-        const xOffset = i * 70
-        enemies.push(
-          new Enemy({
-            position: { x: waypoints[0].x - xOffset, y: waypoints[0].y }
-          })
-        )
-      }
-    }
     
     window.addEventListener('mousemove', (event) => {
       const rect = canvas.getBoundingClientRect()
@@ -57,7 +84,7 @@ export default function Game() {
       }
     })
 
-    const canvas = document.querySelector('canvas')
+    const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
 
     canvas.width = 1280
@@ -209,7 +236,7 @@ export default function Game() {
 
     animate()
     
-    return () => {
+    return function cleanup() {
       window.cancelAnimationFrame(animate)
     }
   }, [])
@@ -217,7 +244,7 @@ export default function Game() {
   return (
     <div style={{ width: "100vw", height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
     <div style={{ position: "relative", display: "inline-block" }}>
-      <canvas />
+      <canvas ref={canvasRef} />
       <div id="gameOver" style={{
         position: "absolute",
         top: 0,
