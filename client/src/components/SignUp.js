@@ -10,15 +10,18 @@ import Container from '@mui/material/Container';
 import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { UserContext } from '../context/user';
+import { useForm } from "react-hook-form"
 
 export default function SignIn() {
   const { user, setUser } = useContext(UserContext)
+
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   })
-  const navigate = useNavigate()
   const { username, password } = formData
+
+  const navigate = useNavigate()
 
   function handleChange(e) {
     const { name, value } = e.target
@@ -42,7 +45,7 @@ export default function SignIn() {
           navigate(`/dashboard`)
         })
       } else {
-        console.log("error sign up")
+        console.log(res)
       }
     })
   };
