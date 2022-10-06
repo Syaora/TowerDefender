@@ -59,8 +59,8 @@ export default function Game() {
   async function getRoundInfo(round_position) {
     let resp = await fetch(`/rounds/${roundPosition}`)
     resp = await resp.json()
-    console.log(resp)
     wavePosition = 0
+    document.querySelector('#playBtn').style.display = 'none'
     roundInProgress = true
     waves = resp.waves
     spawnEnemies(waves[0].spawn_count)
@@ -195,6 +195,7 @@ export default function Game() {
           spawnEnemies(waves[wavePosition].spawn_count)
         } else if (roundInProgress) {
           roundPosition += 1
+          document.querySelector('#playBtn').style.display = 'flex'
           roundInProgress = false
         }
       }
@@ -301,7 +302,8 @@ export default function Game() {
           background: "linear-gradient(to left bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)"
         }}></div>
 
-        <IconButton onClick={() => getRoundInfo(userInfo.round_position)} id="playBtn" size="large" sx={{
+        {/* Play Button */}
+        <IconButton id="playBtn" onClick={() => getRoundInfo(userInfo.round_position)} id="playBtn" size="large" sx={{
           position: "absolute",
           bottom: "4px",
           right: "8px",
