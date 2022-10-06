@@ -15,21 +15,20 @@ import { UserContext } from "../context/user"
 export default function Game() {
   const { user } = useContext(UserContext)
   const [userInfo, setUserInfo] = useState([])
+  let { heart, coin, round_position } = userInfo
+  const buildings = []
 
+  ///Game information
   let waves = []
   const enemies = []
   let wavePosition = 0
-  let roundPosition = 1
+
   let roundInProgress = false
 
   const location = useLocation()
   let canvasRef = useRef(null)
 
   const navigate = useNavigate()
-
-  let hearts = userInfo.health
-  let coins = userInfo.money
-  const buildings = []
 
   const mouse = {
     x: undefined,
@@ -41,8 +40,11 @@ export default function Game() {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        heart: heart,
+        coin: coin,
+        round_position: round_position
       })
-    })
+    }).then(res => res.json(resp => console.log(resp)))
   }
 
   function spawnEnemies(spawnCount) {
@@ -57,7 +59,7 @@ export default function Game() {
   }
 
   async function getRoundInfo(round_position) {
-    let resp = await fetch(`/rounds/${roundPosition}`)
+    let resp = await fetch(`/rounds/${round_position}`)
     resp = await resp.json()
     wavePosition = 0
     document.querySelector('#playBtn').style.display = 'none'
@@ -140,9 +142,9 @@ export default function Game() {
 
     /////////////////////Building Placement///////////////////////
     canvas.addEventListener('click', (event) => {
-      if (activeTile && !activeTile.isOccupied && coins - 50 >= 0) {
-        coins -= 50
-        document.querySelector('#coins').textContent = coins
+      if (activeTile && !activeTile.isOccupied && coin - 50 >= 0) {
+        coin -= 50
+        document.querySelector('#coins').textContent = coin
         buildings.push(new Building({
           position: {
             x: activeTile.position.x,
@@ -177,11 +179,11 @@ export default function Game() {
 
         //if enemy reaches the end of path
         if (enemy.position.y > canvas.height) {
-          hearts -= 1
+          heart -= 1
           enemies.splice(i, 1)
-          document.querySelector('#hearts').textContent = hearts
+          document.querySelector('#hearts').textContent = heart
 
-          if (hearts === 0) {
+          if (heart === 0) {
             cancelAnimationFrame(animationID)
             document.querySelector('#gameOver').style.display = 'flex'
           }
@@ -194,9 +196,13 @@ export default function Game() {
           wavePosition += 1
           spawnEnemies(waves[wavePosition].spawn_count)
         } else if (roundInProgress) {
-          roundPosition += 1
-          document.querySelector('#playBtn').style.display = 'flex'
+          round_position += 1
           roundInProgress = false
+
+          document.querySelector('#playBtn').style.display = 'flex'
+          document.querySelector('#roundPosition').textContent = `Round ${round_position}`
+
+          updateGame()
         }
       }
 
@@ -249,8 +255,8 @@ export default function Game() {
               //remove enemy from array and handles bug where it cant find enemy
               if (enemyIndex > -1) {
                 enemies.splice(enemyIndex, 1)
-                coins += 25
-                document.querySelector('#coins').textContent = coins
+                coin += 25
+                document.querySelector('#coins').textContent = coin
               }
             }
 
@@ -303,7 +309,7 @@ export default function Game() {
         }}></div>
 
         {/* Play Button */}
-        <IconButton id="playBtn" onClick={() => getRoundInfo(userInfo.round_position)} id="playBtn" size="large" sx={{
+        <IconButton id="playBtn" onClick={() => getRoundInfo(userInfo.round_position)} size="large" sx={{
           position: "absolute",
           bottom: "4px",
           right: "8px",
@@ -316,7 +322,7 @@ export default function Game() {
         </IconButton>
 
         {/* Round Number */}
-        <div style={{
+        <div id="roundPosition" style={{
           position: "absolute",
           top: "4px",
           left: "8px",
@@ -325,7 +331,7 @@ export default function Game() {
           display: "flex",
           alignItems: "center"
         }}>
-          Round {userInfo.round_position}
+          Round {round_position}
         </div>
 
         <div style={{
@@ -359,7 +365,7 @@ export default function Game() {
              30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4
               148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5V432c0 44.2-86 80-192 80S0 476.2 0
                432V396.6c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/></svg>
-            <div id="coins">{coins}</div>
+            <div id="coins">{coin}</div>
           </div>
 
           {/* hearts */}
@@ -375,7 +381,7 @@ export default function Game() {
                 strokeLinejoin="round"
                 d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
             </svg>
-            <div id="hearts">{hearts}</div>
+            <div id="hearts">{heart}</div>
           </div>
         </div>
       </div>

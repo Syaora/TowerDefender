@@ -7,11 +7,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 g1 = Game.create(map: 'meadow')
 
-Round.create(money: '10', number: 1)
-Round.create(money: '13', number: 2)
-Round.create(money: '15', number: 3)
-Round.create(money: '15', number: 4)
-Round.create(money: '17', number: 5)
+Round.create(bonus_coin: '10', number: 1)
+Round.create(bonus_coin: '13', number: 2)
+Round.create(bonus_coin: '15', number: 3)
+Round.create(bonus_coin: '15', number: 4)
+Round.create(bonus_coin: '17', number: 5)
 
 Enemy.create(name: "Firebug", health: 100)
 
@@ -36,5 +36,5 @@ Wave.create(enemy_id: 1, spawn_count: 10, round_id: 5)
 
 u1 = User.create(username: "Test", password: "test")
 
-UserGame.create(user: u1, game: g1, name: "test", money: 50, health: 50, round_position: 1)
-UserGame.create(user: u1, game: g1, name: "test2", money: 50, health: 50, round_position: 1)
+UserGame.create(user: u1, game: g1, name: "test", coin: 50, heart: 10, round_position: 1)
+UserGame.create(user: u1, game: g1, name: "test2", coin: 50, heart: 10, round_position: 1)
