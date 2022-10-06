@@ -16,8 +16,11 @@ export default function Game() {
   const { user } = useContext(UserContext)
   const [userInfo, setUserInfo] = useState([])
 
-  const [waves, setWaves] = useState([])
+  let waves = []
   const enemies = []
+  let wavePosition = 0
+  let roundPosition = 1
+  let roundInProgress = false
 
   const location = useLocation()
   let canvasRef = useRef(null)
@@ -53,32 +56,28 @@ export default function Game() {
     }
   }
 
-  function getRoundInfo(info) {
-    fetch(`/rounds/${info.round_position}`)
-      .then(res => {
-        res.json().then(res => {
-          setWaves(res.waves)
-        })
-      })
+  async function getRoundInfo(round_position) {
+    let resp = await fetch(`/rounds/${roundPosition}`)
+    resp = await resp.json()
+    wavePosition = 0
+    roundInProgress = true
+    waves = resp.waves
+    spawnEnemies(waves[0].spawn_count)
   }
-  
-  ///////////////////////Game Setup////////////////////
+
+  ///////////////////////////////////Setup////////////////////////////////
   useEffect(() => {
     const info = location.state ? location.state.userInfo : false
 
     if (info && user) {
       setUserInfo(info)
-      getRoundInfo(info)
     } else {
       navigate("/dashboard")
     }
-  }, [])
+     ///////////////////////////////////Gameplay/////////////////////////////////////
 
-  ///////////////////////Gameplay/////////////////////////////
-  useEffect(() => {
     let activeTile = undefined
     const explosions = []
-    spawnEnemies(3)
 
     ///////////////////////Mouse//////////////////////////////
     window.addEventListener('mousemove', (event) => {
@@ -137,7 +136,7 @@ export default function Game() {
 
     const image = new Image()
     image.src = map
-    
+
     /////////////////////Building Placement///////////////////////
     canvas.addEventListener('click', (event) => {
       if (activeTile && !activeTile.isOccupied && coins - 50 >= 0) {
@@ -168,6 +167,8 @@ export default function Game() {
       //map
       ctx.drawImage(image, 0, 0)
 
+      ///########Enemies##########//
+
       //animate enemies
       for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i]
@@ -186,6 +187,18 @@ export default function Game() {
         }
       }
 
+      //tracking total enemies
+      if (enemies.length === 0) {
+        if (wavePosition < waves.length - 1) {
+          wavePosition += 1
+          spawnEnemies(waves[wavePosition].spawn_count)
+        } else if (roundInProgress) {
+          roundPosition += 1
+          roundInProgress = false
+        }
+      }
+
+      //###########Explosions#########///
       for (let i = explosions.length - 1; i >= 0; i--) {
         const explosion = explosions[i]
         explosion.draw(ctx)
@@ -196,15 +209,11 @@ export default function Game() {
         }
       }
 
-      //tracking total enemies
-      if (enemies.length === 0) {
-        spawnEnemies(5)
-      }
-
       placementTiles.forEach(tile => {
         tile.update(mouse, ctx)
       })
 
+      //###########Building#######///
       buildings.forEach(building => {
         building.update(ctx)
         building.target = null
@@ -291,7 +300,7 @@ export default function Game() {
           background: "linear-gradient(to left bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)"
         }}></div>
 
-        <IconButton id="playBtn" size="large" sx={{
+        <IconButton onClick={() => getRoundInfo(userInfo.round_position)} id="playBtn" size="large" sx={{
           position: "absolute",
           bottom: "4px",
           right: "8px",
@@ -300,7 +309,7 @@ export default function Game() {
           display: "flex",
           alignItems: "center"
         }}>
-          <PlayCircleFilledIcon style={{ fontSize: "60px"}} />
+          <PlayCircleFilledIcon style={{ fontSize: "60px" }} />
         </IconButton>
 
         {/* Round Number */}
