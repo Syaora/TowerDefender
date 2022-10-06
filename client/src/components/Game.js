@@ -36,6 +36,12 @@ export default function Game() {
     y: undefined
   }
 
+  function onDeleteGame(){
+    fetch(`/user_games/${userInfo.id}`, {
+      method: "DELETE"
+    })
+  }
+
   function updateGame() {
     fetch(`/user_games/${userInfo.id}`, {
       method: "PATCH",
@@ -190,6 +196,7 @@ export default function Game() {
 
           if (heart === 0) {
             cancelAnimationFrame(animationID)
+            onDeleteGame()
             document.querySelector('#gameOver').style.display = 'flex'
           }
         }
