@@ -59,6 +59,7 @@ export default function Game() {
   async function getRoundInfo(round_position) {
     let resp = await fetch(`/rounds/${roundPosition}`)
     resp = await resp.json()
+    console.log(resp)
     wavePosition = 0
     roundInProgress = true
     waves = resp.waves
@@ -270,7 +271,7 @@ export default function Game() {
     return function cleanup() {
       cancelAnimationFrame(animationID)
     }
-  }, [])
+  }, [waves])
 
   return (
     <div style={{ width: "100vw", height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
