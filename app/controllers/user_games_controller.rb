@@ -10,8 +10,8 @@ class UserGamesController < ApplicationController
       user_id: params[:user_id],
       game_id: game.id, #Map --- needs to be updated later to allow different maps
       name: params[:name],
-      health: 50,
-      money: 50,
+      heart: 10,
+      coin: 50,
       round_position: 1
     )
     render json: user_game, status: :ok
@@ -20,7 +20,7 @@ class UserGamesController < ApplicationController
   def show
     user_game = UserGame.find_by(id: params[:id])
     if user_game
-      render json: user_game
+      render json: user_game, status: :ok
     else
       render_not_found
     end
@@ -29,8 +29,8 @@ class UserGamesController < ApplicationController
   def update
     user_game = UserGame.find_by(id: params[:id])
     if user_game
-      user_game.update(user_game)
-      render json: user_game 
+      user_game.update!(user_game_params)
+      render json: user_game, status: :accepted
     else
       render_not_found
     end
@@ -49,6 +49,6 @@ class UserGamesController < ApplicationController
   private
 
   def user_game_params
-    params.permit(:user_id, :game_id, :name, :money, :health, :round_position)
+    params.permit(:user_id, :game_id, :name, :coin, :heart, :round_position)
   end
 end
