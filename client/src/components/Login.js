@@ -41,6 +41,7 @@ export default function Login() {
       if (res.ok) {
         res.json().then(loginUser => {
           setUser(loginUser)
+          localStorage.setItem("user", JSON.stringify(loginUser))
           navigate(`/dashboard`)
         })
       } else {

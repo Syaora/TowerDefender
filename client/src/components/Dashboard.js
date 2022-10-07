@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom"
 import { UserContext } from "../context/user"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
@@ -24,18 +24,14 @@ export default function Dashboard() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (user) {
-      fetch("/usergames")
-        .then(res => {
-          if (res.ok) {
-            res.json().then((games) => {
-              setUserGames(games)
-            })
-          }
-        })
-    } else {
-      navigate("/")
-    }
+    fetch("/usergames")
+      .then(res => {
+        if (res.ok) {
+          res.json().then((games) => {
+            setUserGames(games)
+          })
+        }
+      })
   }, [])
 
   function onClose() {

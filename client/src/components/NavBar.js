@@ -16,6 +16,7 @@ export default function NavBar() {
       method: "DELETE"
     })
     setUser(null)
+    localStorage.clear()
     navigate("/login")
   }
 

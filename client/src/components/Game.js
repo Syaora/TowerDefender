@@ -10,10 +10,8 @@ import explosionsPNG from "./img/Tower03impact.png"
 import { useLocation, useNavigate } from "react-router-dom"
 import IconButton from '@mui/material/IconButton';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
-import { UserContext } from "../context/user"
 
 export default function Game() {
-  const { user } = useContext(UserContext)
   const [userInfo, setUserInfo] = useState([])
   let { heart, coin, round_position } = userInfo
   const buildings = []
@@ -83,7 +81,7 @@ export default function Game() {
   useEffect(() => {
     const info = location.state ? location.state.userInfo : false
 
-    if (info && user) {
+    if (info) {
       setUserInfo(info)
     } else {
       navigate("/dashboard")

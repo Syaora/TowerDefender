@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -12,6 +12,7 @@ import Game from "./components/Game"
 import { UserProvider } from "./context/user"
 import NavBar from "./components/NavBar"
 import NotFound from "./components/NotFound"
+import PrivateRoute from "./components/PrivateRoute";
 
 
 function App() {
@@ -24,8 +25,16 @@ function App() {
             <Route exact path="/" element={<HomePage />} />
             <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/game" element={<Game />} />
+            <Route path="/dashboard" element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }/>
+            <Route path="/game" element={
+              <PrivateRoute>
+                <Game />
+              </PrivateRoute>
+            }/>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </UserProvider>
