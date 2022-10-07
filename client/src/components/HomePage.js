@@ -1,13 +1,8 @@
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack'
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { useNavigate } from "react-router-dom"
 
 export default function HomePage() {
-  const navigate = useNavigate()
-
   return (
     <>
       <main>
