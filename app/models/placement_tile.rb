@@ -1,2 +1,0 @@
-class PlacementTile < ApplicationRecord
-end
