@@ -11,11 +11,15 @@ import CardActions from '@mui/material/CardActions';
 import { CardMedia } from "@mui/material";
 import map from "./maps/meadow/meadowMap.png"
 import NewGameModal from './NewGameModal';
+import ErrorMessage from './ErrorMessage';
 
 export default function Dashboard() {
   const { user } = useContext(UserContext)
+
   const [userGames, setUserGames] = useState([])
   const [open, setOpen] = useState(false)
+  const [errors, setErrors] = useState([])
+
   const img = map
   const navigate = useNavigate()
 
@@ -41,7 +45,7 @@ export default function Dashboard() {
   function handleNewGame(name) {
     fetch(`/user_games`, {
       method: "POST",
-      headers: { 'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         user_id: user.id,
         name: name
@@ -50,15 +54,15 @@ export default function Dashboard() {
       if (res.ok) {
         res.json().then(game => {
           //Pass usergame.id to game
-          navigate("/game", { state: { userInfo: game }})
+          navigate("/game", { state: { userInfo: game } })
         })
       } else {
-        console.log(res)
+        res.json().then(json => setErrors(Object.entries(json.errors)))
       }
     })
   }
 
-  function onDeleteGame(id){
+  function onDeleteGame(id) {
     fetch(`/user_games/${id}`, {
       method: "DELETE"
     }).then(res => {
@@ -70,6 +74,7 @@ export default function Dashboard() {
   return (
     <>
       <Container sx={{ py: 8 }} maxWidth="md">
+        {errors.length > 0 ? <ErrorMessage errors={errors} /> : null}
         <div style={{ padding: 20 }}>
           <Grid
             container
@@ -100,7 +105,7 @@ export default function Dashboard() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button onClick={() => navigate("/game", { state: { userInfo: game }})} size="small">Play</Button>
+                  <Button onClick={() => navigate("/game", { state: { userInfo: game } })} size="small">Play</Button>
                   <Button onClick={() => onDeleteGame(game.id)} size="small">Delete</Button>
                 </CardActions>
               </Card>
