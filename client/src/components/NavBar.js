@@ -28,8 +28,8 @@ export default function NavBar() {
             TowerDefender
           </Typography>
         </Box>
-        {user ? <Button onClick={() => navigate("/dashboard")} color="inherit">Dashboard</Button> : null}
-        {user ? <Button onClick={handleLogOut} color="inherit">Logout</Button> : null}
+        {user ? <Button onClick={() => navigate("/dashboard")} color="inherit">Dashboard</Button> : <Button onClick={() => navigate("/login")} color="inherit">Log In</Button>}
+        {user ? <Button onClick={handleLogOut} color="inherit">Logout</Button> : <Button onClick={() => navigate("/register")} color="inherit">Sign Up</Button>}
       </Toolbar>
     </AppBar>
   )

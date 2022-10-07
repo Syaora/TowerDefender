@@ -33,15 +33,6 @@ export default function HomePage() {
               hours and hours of gameplay.  Build awesome towers and defend from
               every invading enemies!
             </Typography>
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              <Button onClick={() => navigate("/login")} variant="contained">Log In</Button>
-              <Button onClick={() => navigate("/register")} variant="outlined">Sign Up</Button>
-            </Stack>
           </Container>
         </Box>
       </main>
