@@ -10,15 +10,19 @@ import Container from '@mui/material/Container';
 import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { UserContext } from '../context/user';
+import ErrorMessage from './ErrorMessage';
 
 export default function SignIn() {
   const { user, setUser } = useContext(UserContext)
+  const [errors, setErrors] = useState([])
+
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   })
-  const navigate = useNavigate()
   const { username, password } = formData
+
+  const navigate = useNavigate()
 
   function handleChange(e) {
     const { name, value } = e.target
@@ -42,7 +46,7 @@ export default function SignIn() {
           navigate(`/dashboard`)
         })
       } else {
-        console.log("error sign up")
+        res.json().then(json => setErrors(Object.entries(json.errors)))
       }
     })
   };
@@ -54,6 +58,7 @@ export default function SignIn() {
   return (
     <>
       <Container component="main" maxWidth="xs">
+      { errors.length > 0 ? <ErrorMessage errors={errors} /> : null}
         <CssBaseline />
         <Box
           sx={{

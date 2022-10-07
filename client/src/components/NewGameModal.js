@@ -30,6 +30,7 @@ export default function NewGameModal({ open, onClose, handleNewGame}) {
           value={name}
           onChange={onNameChange}
           fullWidth
+          required
           variant="standard"
         />
       </DialogContent>

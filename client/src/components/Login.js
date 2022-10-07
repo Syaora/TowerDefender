@@ -10,15 +10,19 @@ import Container from '@mui/material/Container';
 import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { UserContext } from '../context/user';
+import ErrorMessage from './ErrorMessage';
 
 export default function Login() {
   const { user, setUser } = useContext(UserContext)
+
+  const [errors, setErrors] = useState([])
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   })
+
   const navigate = useNavigate()
-  const {username, password} = formData
+  const { username, password } = formData
 
   function onSubmit(event) {
     event.preventDefault();
@@ -34,13 +38,13 @@ export default function Login() {
       },
       body: JSON.stringify(loginUser)
     }).then(res => {
-      if (res.ok){
+      if (res.ok) {
         res.json().then(loginUser => {
           setUser(loginUser)
           navigate(`/dashboard`)
         })
       } else {
-        console.log("error")
+        res.json().then(json => setErrors(Object.entries(json.errors)))
       }
     })
   }
@@ -58,6 +62,7 @@ export default function Login() {
   return (
     <>
       <Container component="main" maxWidth="xs">
+        {errors.length > 0 ? <ErrorMessage errors={errors} /> : null}
         <CssBaseline />
         <Box
           sx={{

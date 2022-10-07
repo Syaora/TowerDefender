@@ -22,6 +22,7 @@ export default function Game() {
   let waves = []
   const enemies = []
   let wavePosition = 0
+  let coinBonus = 0
 
   let roundInProgress = false
 
@@ -33,6 +34,12 @@ export default function Game() {
   const mouse = {
     x: undefined,
     y: undefined
+  }
+
+  function onDeleteGame(){
+    fetch(`/user_games/${userInfo.id}`, {
+      method: "DELETE"
+    })
   }
 
   function updateGame() {
@@ -61,10 +68,14 @@ export default function Game() {
   async function getRoundInfo(round_position) {
     let resp = await fetch(`/rounds/${round_position}`)
     resp = await resp.json()
-    wavePosition = 0
+
     document.querySelector('#playBtn').style.display = 'none'
     roundInProgress = true
+
+    wavePosition = 0
     waves = resp.waves
+    coinBonus = resp.bonus_coin
+
     spawnEnemies(waves[0].spawn_count)
   }
 
@@ -185,6 +196,7 @@ export default function Game() {
 
           if (heart === 0) {
             cancelAnimationFrame(animationID)
+            onDeleteGame()
             document.querySelector('#gameOver').style.display = 'flex'
           }
         }
@@ -201,7 +213,9 @@ export default function Game() {
 
           document.querySelector('#playBtn').style.display = 'flex'
           document.querySelector('#roundPosition').textContent = `Round ${round_position}`
-
+          
+          coin += coinBonus
+          document.querySelector('#coins').textContent = coin
           updateGame()
         }
       }
@@ -255,7 +269,7 @@ export default function Game() {
               //remove enemy from array and handles bug where it cant find enemy
               if (enemyIndex > -1) {
                 enemies.splice(enemyIndex, 1)
-                coin += 25
+                coin += 10
                 document.querySelector('#coins').textContent = coin
               }
             }
