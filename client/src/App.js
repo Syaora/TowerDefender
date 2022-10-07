@@ -25,16 +25,10 @@ function App() {
             <Route exact path="/" element={<HomePage />} />
             <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }/>
-            <Route path="/game" element={
-              <PrivateRoute>
-                <Game />
-              </PrivateRoute>
-            }/>
+            <Route element={<PrivateRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/game" element={<Game />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </UserProvider>
