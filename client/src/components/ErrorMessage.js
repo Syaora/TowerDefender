@@ -8,7 +8,7 @@ export default function ErrorMessage({ errors }) {
     <Stack sx={{ paddingTop: "30px", width: '100%' }} spacing={2}>
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
-        {errors ? errors.map(error => <div key={error.id}><strong>{error[0]}</strong> {error[1]}</div>) : null}
+        {errors ? errors.map(error => <div key={error[0]}><strong>{error[0]}</strong> {error[1]}</div>) : null}
       </Alert>
     </Stack>
   )
