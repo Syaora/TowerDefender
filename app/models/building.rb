@@ -1,3 +1,3 @@
 class Building < ApplicationRecord
-  belongs_to :placement_tile
+  belongs_to :user_games
 end
