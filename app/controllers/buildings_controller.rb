@@ -1,7 +1,6 @@
 class BuildingsController < ApplicationController
   def create
     newBuildings = Building.insert_all(buildings_params, returning: [:id, :x, :y, :user_game_id])
-    byebug
     render json: newBuildings
   end
 

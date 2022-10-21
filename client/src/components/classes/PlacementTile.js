@@ -1,12 +1,12 @@
 import React from "react"
 
 export default class PlacementTile extends React.Component {
-  constructor({ position = { x: 0, y:0 }}){
+  constructor({ position = { x: 0, y:0 }, occupied = false }){
     super({ position })
     this.position = position
     this.size = 64
     this.color = 'rgba(255, 255, 255, 0.1)'
-    this.occupied = false
+    this.occupied = occupied
   }
 
   draw(ctx) {

@@ -1,7 +1,7 @@
 import map from './maps/meadow/meadowMap.png'
 import waypoints from './maps/meadow/meadowWaypoints'
 import placementTileData from "./maps/meadow/meadowPlacementTile.js"
-import { useEffect, useRef, useState, useContext } from "react"
+import { useEffect, useRef, useState } from "react"
 import PlacementTile from './classes/PlacementTile'
 import Building from "./classes/Building"
 import Enemy from "./classes/Enemy"
@@ -13,8 +13,8 @@ import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 
 export default function Game() {
   const [userInfo, setUserInfo] = useState([])
-  let { heart, coin, round_position } = userInfo
-  const buildings = []
+  let { heart, coin, round_position, buildings = [] } = userInfo
+  const currentBuildings = []
 
   ///Game information
   let waves = []
@@ -53,12 +53,11 @@ export default function Game() {
     })
 
     //Adds building
-    console.log(newBuildings)
     fetch(`/buildings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ newBuildings })
-    }).then(res => res.json().then(r => console.log(r)))
+    })
 
     newBuildings = []
   }
@@ -144,13 +143,28 @@ export default function Game() {
     placementTileData2D.forEach((row, y) => {
       row.forEach((symbol, x) => {
         if (symbol === 170) {
+          let tempX = x * 64
+          let tempY = y * 64
+          let occupied = false
+
+          //setups buildings
+          if (buildings.length > 0) {
+            const found = buildings.find(building => building.x === tempX && building.y === tempY)
+            occupied = found ? true : false
+
+            if (occupied) {
+              addBuildings(tempX, tempY)
+            }
+          }
+
           //add building placement tile here
           placementTiles.push(
             new PlacementTile({
               position: {
-                x: x * 64,
-                y: y * 64
-              }
+                x: tempX,
+                y: tempY
+              },
+              occupied: occupied
             })
           )
         }
@@ -161,24 +175,28 @@ export default function Game() {
     image.src = map
 
     /////////////////////Building Placement///////////////////////
+    function addBuildings(x, y) {
+      currentBuildings.push(new Building({
+        position: {
+          x: x,
+          y: y
+        }
+      }))
+
+      newBuildings.push({ x: x, y: y, user_game_id: userInfo.id })
+    }
+
     canvas.addEventListener('click', (event) => {
       if (activeTile && !activeTile.isOccupied && coin - 50 >= 0) {
         coin -= 50
         document.querySelector('#coins').textContent = coin
 
-        buildings.push(new Building({
-          position: {
-            x: activeTile.position.x,
-            y: activeTile.position.y
-          }
-        }))
-
-        newBuildings.push({ x: activeTile.position.x, y: activeTile.position.y, user_game_id: userInfo.id })
+        addBuildings(activeTile.position.x, activeTile.position.y)
 
         activeTile.isOccupied = true
 
         //used to sort building to correct position so that they dont overlap
-        buildings.sort((a, b) => {
+        currentBuildings.sort((a, b) => {
           return a.position.y - b.position.y
         })
       }
@@ -249,7 +267,7 @@ export default function Game() {
       })
 
       //###########Building#######///
-      buildings.forEach(building => {
+      currentBuildings.forEach(building => {
         building.update(ctx)
         building.target = null
 
