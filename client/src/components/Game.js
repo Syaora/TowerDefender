@@ -53,11 +53,12 @@ export default function Game() {
     })
 
     //Adds building
+    console.log(newBuildings)
     fetch(`/buildings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ newBuildings })
-    })
+    }).then(res => res.json().then(r => console.log(r)))
 
     newBuildings = []
   }
@@ -172,7 +173,7 @@ export default function Game() {
           }
         }))
 
-        newBuildings.push({ x: activeTile.position.x, y: activeTile.position.y })
+        newBuildings.push({ x: activeTile.position.x, y: activeTile.position.y, user_game_id: userInfo.id })
 
         activeTile.isOccupied = true
 

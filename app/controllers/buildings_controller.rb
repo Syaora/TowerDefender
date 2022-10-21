@@ -1,7 +1,8 @@
 class BuildingsController < ApplicationController
   def create
-    buildings = Building.insert_all(buildings_params, returning: [:id, :x, :y])
-    render json: buildings
+    newBuildings = Building.insert_all(buildings_params, returning: [:id, :x, :y, :user_game_id])
+    byebug
+    render json: newBuildings
   end
 
   def show
@@ -9,21 +10,9 @@ class BuildingsController < ApplicationController
     render json: towers, status: :ok
   end
 
-  def self.insert_all(records)
-    normalized = normalize(records)
-    super(normalized)
-  end
+  private
 
-  def self.normalize(records)
-    records.each do |rec|
-      add_timestamp(rec)
-    end
-  end
-
-  def self.add_timestamp(record)
-    time = Time.now.utc 
-
-    record['created_at'] = time
-    record['updated_at'] = time
+  def buildings_params
+    params.permit(newBuildings: [:x, :y, :user_game_id]).require(:newBuildings)
   end
 end
