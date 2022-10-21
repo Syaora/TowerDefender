@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_06_080407) do
+ActiveRecord::Schema.define(version: 2022_10_21_104114) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "buildings", force: :cascade do |t|
-    t.integer "radius"
-    t.integer "width"
-    t.string "image_url"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.integer "x"
+    t.integer "y"
+    t.integer "user_game_id"
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
   create_table "enemies", force: :cascade do |t|
@@ -32,15 +32,6 @@ ActiveRecord::Schema.define(version: 2022_10_06_080407) do
 
   create_table "games", force: :cascade do |t|
     t.string "map"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "placement_tiles", force: :cascade do |t|
-    t.integer "size"
-    t.integer "positionx"
-    t.integer "positiony"
-    t.boolean "occupied"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

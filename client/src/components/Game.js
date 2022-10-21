@@ -21,7 +21,7 @@ export default function Game() {
   const enemies = []
   let wavePosition = 0
   let coinBonus = 0
-
+  let newBuildings = []
   let roundInProgress = false
 
   const location = useLocation()
@@ -41,6 +41,7 @@ export default function Game() {
   }
 
   function updateGame() {
+    //Updates game information
     fetch(`/user_games/${userInfo.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -49,7 +50,17 @@ export default function Game() {
         coin: coin,
         round_position: round_position
       })
-    }).then(res => res.json(resp => console.log(resp)))
+    })
+
+    //Adds building
+    console.log(newBuildings)
+    fetch(`/buildings`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ newBuildings })
+    }).then(res => res.json().then(r => console.log(r)))
+
+    newBuildings = []
   }
 
   function spawnEnemies(spawnCount) {
@@ -154,12 +165,16 @@ export default function Game() {
       if (activeTile && !activeTile.isOccupied && coin - 50 >= 0) {
         coin -= 50
         document.querySelector('#coins').textContent = coin
+
         buildings.push(new Building({
           position: {
             x: activeTile.position.x,
             y: activeTile.position.y
           }
         }))
+
+        newBuildings.push({ x: activeTile.position.x, y: activeTile.position.y, user_game_id: userInfo.id })
+
         activeTile.isOccupied = true
 
         //used to sort building to correct position so that they dont overlap

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :user_games
   resources :games, only: [:index]
   resources :rounds, only: [:show]
+  resources :buildings, only: [:show, :create]
 
   #session
   post "/login", to: "sessions#create"
