@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CardActions from '@mui/material/CardActions';
 import { CardMedia } from "@mui/material";
-import map from "./maps/meadow/meadowMap.png"
+import map from "./maps/meadowMap.png"
 import NewGameModal from './NewGameModal';
 import ErrorMessage from './ErrorMessage';
 
@@ -28,6 +28,7 @@ export default function Dashboard() {
       .then(res => {
         if (res.ok) {
           res.json().then((games) => {
+            console.log(games)
             setUserGames(games)
           })
         }

@@ -1,6 +1,6 @@
-import map from './maps/meadow/meadowMap.png'
-import waypoints from './maps/meadow/meadowWaypoints'
-import placementTileData from "./maps/meadow/meadowPlacementTile.js"
+import map from './maps/meadowMap.png'
+import waypoints from './maps/meadowWaypoints'
+import placementTileData from "./maps/meadowPlacementTile.js"
 import { useEffect, useRef, useState } from "react"
 import PlacementTile from './classes/PlacementTile'
 import Building from "./classes/Building"
@@ -21,6 +21,7 @@ export default function Game() {
   const enemies = []
   let wavePosition = 0
   let coinBonus = 0
+  
   let newBuildings = []
   let roundInProgress = false
 
@@ -73,6 +74,7 @@ export default function Game() {
     }
   }
 
+  ////////////////////////////Round Setup////////////////////////////////
   async function getRoundInfo(round_position) {
     let resp = await fetch(`/rounds/${round_position}`)
     resp = await resp.json()
