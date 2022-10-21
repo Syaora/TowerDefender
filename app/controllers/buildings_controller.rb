@@ -5,6 +5,8 @@ class BuildingsController < ApplicationController
   end
 
   def show
+    towers = Building.where(user_game_id: params[:user_game_id])
+    render json: towers, status: :ok
   end
 
   def self.insert_all(records)
