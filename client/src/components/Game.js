@@ -358,7 +358,7 @@ export default function Game() {
         }}></div>
 
         {/* Play Button */}
-        <IconButton id="playBtn" onClick={() => getRoundInfo(userInfo.round_position)} size="large" sx={{
+        <IconButton id="playBtn" onClick={() => getRoundInfo(round_position)} size="large" sx={{
           position: "absolute",
           bottom: "4px",
           right: "8px",
