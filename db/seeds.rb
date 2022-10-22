@@ -14,23 +14,25 @@ Round.create(bonus_coin: '15', number: 4)
 Round.create(bonus_coin: '17', number: 5)
 
 Enemy.create(name: "Firebug", health: 100)
+Enemy.create(name: "StrongerFirebug", health: 150)
+Enemy.create(name: "WeakFirebug", health: 80)
 
-Wave.create(enemy_id: 1, spawn_count: 3, round_id: 1)
+Wave.create(enemy_id: 3, spawn_count: 3, round_id: 1)
 
-Wave.create(enemy_id: 1, spawn_count: 3, round_id: 2)
-Wave.create(enemy_id: 1, spawn_count: 5, round_id: 2)
+Wave.create(enemy_id: 2, spawn_count: 3, round_id: 2)
+Wave.create(enemy_id: 3, spawn_count: 5, round_id: 2)
 
-Wave.create(enemy_id: 1, spawn_count: 5, round_id: 3)
+Wave.create(enemy_id: 2, spawn_count: 5, round_id: 3)
 Wave.create(enemy_id: 1, spawn_count: 7, round_id: 3)
 Wave.create(enemy_id: 1, spawn_count: 3, round_id: 3)
 
 Wave.create(enemy_id: 1, spawn_count: 4, round_id: 4)
-Wave.create(enemy_id: 1, spawn_count: 3, round_id: 4)
+Wave.create(enemy_id: 2, spawn_count: 3, round_id: 4)
 Wave.create(enemy_id: 1, spawn_count: 10, round_id: 4)
-Wave.create(enemy_id: 1, spawn_count: 3, round_id: 4)
+Wave.create(enemy_id: 3, spawn_count: 3, round_id: 4)
 
 Wave.create(enemy_id: 1, spawn_count: 8, round_id: 5)
-Wave.create(enemy_id: 1, spawn_count: 5, round_id: 5)
+Wave.create(enemy_id: 2, spawn_count: 5, round_id: 5)
 Wave.create(enemy_id: 1, spawn_count: 7, round_id: 5)
 Wave.create(enemy_id: 1, spawn_count: 10, round_id: 5)
 
