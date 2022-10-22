@@ -53,14 +53,16 @@ export default function Game() {
       })
     })
 
-    //Adds building
-    fetch(`/buildings`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ newBuildings })
-    })
+    if (newBuildings.length > 0) {
+      //Adds building
+      fetch(`/buildings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newBuildings })
+      })
 
-    newBuildings = []
+      newBuildings = []
+    }
   }
 
   function spawnEnemies(spawnCount) {
