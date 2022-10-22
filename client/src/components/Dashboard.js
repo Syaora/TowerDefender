@@ -28,7 +28,6 @@ export default function Dashboard() {
       .then(res => {
         if (res.ok) {
           res.json().then((games) => {
-            console.log(games)
             setUserGames(games)
           })
         }
